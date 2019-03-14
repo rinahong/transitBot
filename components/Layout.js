@@ -1,15 +1,16 @@
 import Header from './Header'
-
-const layoutStyle = {
-  margin: 20,
-  padding: 20,
-  border: '1px solid #DDD'
-}
+import MenuBar from './MenuBar'
 
 const Layout = (props) => (
-  <div style={layoutStyle}>
-    <Header />
+  <div style={{height:"100%"}}>
     {props.children}
+    <MenuBar />
+    <style jsx global>{`
+      html,body, #__next{
+        margin: 0;
+        height: 100%;
+      }
+    `}</style>
   </div>
 )
 
