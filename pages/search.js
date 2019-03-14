@@ -20,6 +20,11 @@ class Search extends Component {
     this.searchBusStop = this.searchBusStop.bind(this);
   }
 
+  static async getInitialProps({ query }) {
+    console.log("-----", query)
+    return {}
+ }
+
   handleChange (name) {
     return event => {
       const {currentTarget} = event;
@@ -28,7 +33,7 @@ class Search extends Component {
     };
   }
 
-   searchBusStop(event) {
+  searchBusStop(event) {
     const {busStop} = this.state;
     console.log("bs: ",busStop)
 
@@ -40,7 +45,7 @@ class Search extends Component {
       })
 
     event.preventDefault();
-    }
+  }
 
   render () {
     const {busStop} = this.state;
@@ -58,6 +63,7 @@ class Search extends Component {
               />
               <input type='submit' value='Search'/>
           </form>
+          <Link as={`/search/${busStop}`} href={`/search/${busStop}`}><a>server search</a></Link>
         </div>
         <div>
         {

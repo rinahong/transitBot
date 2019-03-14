@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "jest": {
-    "snapshotSerializers": ["enzyme-to-json/serializer"]
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   },
   "scripts": {
     "test": "jest",
@@ -29,7 +31,8 @@
     "node-schedule": "^1.3.2",
     "nodemon": "^1.18.10",
     "react": "^16.8.4",
-    "react-dom": "^16.8.4"
+    "react-dom": "^16.8.4",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

@@ -1,4 +1,3 @@
-import Header from './Header'
 import MenuBar from './MenuBar'
 
 const Layout = (props) => (

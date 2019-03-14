@@ -1,6 +1,7 @@
 const express = require('express')
 const next = require('next')
 const cors = require('cors');
+const axios = require('axios');
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -32,19 +33,32 @@ app.prepare()
      next();
   });
 
+  // <Link as={`/p/${props.id}`} href={`/post?title=${props.title}`}>
   server.get('/p/:id', (req, res) => {
     const actualPage = '/post'
     const queryParams = { title: req.params.id }
     app.render(req, res, actualPage)
   })
 
-  server.get('/search/:busStop', (req, res) => {
-    console.log("in server")
+  server.get('/search/:busstop', (request, response) => {
+    const busStop = request.params.busstop;
     const actualPage = '/search'
-    const queryParams = { busStop: req.params.busStop }
 
-    app.render(req, res, actualPage, queryParams)
+    axios.get(`http://api.translink.ca/rttiapi/v1/stops/60980/estimates?apikey=KA7tOougTQ7LDL2JzCvJ`)
+      .then(res =>  {
+        // console.log(res.data);
+        // response.send(res.data)
+        const queryParams = { estimates: res.data }
+        response.estimates = res.data
+        app.render(request, response, actualPage, queryParams)
+      })
+      .catch(error => {
+        console.log(error);
+      });
   })
+
+  // const searchRouter = require('./routes/translink');
+  // server.use('/search', searchRouter);
 
   server.get('*', (req, res) => {
     return handle(req, res)
