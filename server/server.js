@@ -2,11 +2,15 @@ const express = require('express')
 const next = require('next')
 const cors = require('cors');
 const axios = require('axios');
+const {dialogflow} = require('actions-on-google');
+const bodyParser = require('body-parser')
+
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 require('dotenv').config();
+const assistant = dialogflow();
 
 
 app.prepare()
@@ -54,10 +58,31 @@ app.prepare()
     return handle(req, res)
   })
 
-  server.listen(5005, (err) => {
-    if (err) throw err
-    console.log('> Ready on http://localhost:5005')
-  })
+  assistant.intent('BusEstimates', async conv => {
+    const estimates = await axios.get(`http://api.translink.ca/rttiapi/v1/stops/60980/estimates?apikey=${process.env.TRANSLINK_API}`)
+     .then(res =>  {
+       return res.data
+     })
+     .catch(error => {
+       console.log(error);
+       return {}
+     });
+
+     const convRespose = []
+     estimates.map((estimate)=> {
+       convRespose.push(estimate.RouteNo)
+     })
+     conv.ask(convRespose.join());
+
+  });
+
+  server.post('/webhook', assistant);
+
+  // server.listen(5005, (err) => {
+  //   if (err) throw err
+  //   console.log('> Ready on http://localhost:5005')
+  // })
+  server.use(bodyParser.json(), assistant).listen(5005);
 })
 .catch((ex) => {
   console.error(ex.stack)
