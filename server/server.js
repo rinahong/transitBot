@@ -11,37 +11,36 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 require('dotenv').config();
 const assistant = dialogflow();
+const firebase = require('firebase');
 
+const config = {
+  apiKey: process.env.FIREBASE_API,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PRODJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MSG_SENDER_ID
+};
+
+firebase.initializeApp(config);
 
 app.prepare()
 .then(() => {
   const server = express()
 
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+    const database = firebase.database();
+ }
+
   // For cors configuration
   server.use(cors())
-  // server.use(function (req, res, next) {
-  //    // Website you wish to allow to connect
-  //    res.setHeader('Access-Control-Allow-Origin', '*');
-  //
-  //    // Request methods you wish to allow
-  //    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  //
-  //    // Request headers you wish to allow
-  //    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Accept');
-  //
-  //    // Set to true if you need the website to include cookies in the requests sent
-  //    // to the API (e.g. in case you use sessions)
-  //    res.setHeader('Access-Control-Allow-Credentials', true);
-  //
-  //    // Pass to next layer of middleware
-  //    next();
-  // });
 
   server.get('/search/:busstop', (request, response) => {
     const busStop = request.params.busstop;
     const actualPage = '/search'
 
-    axios.get(`http://api.translink.ca/rttiapi/v1/stops/60980/estimates?apikey=${process.env.TRANSLINK_API}`)
+    axios.get(`http://api.translink.ca/rttiapi/v1/stops/${busStop}/estimates?apikey=${process.env.TRANSLINK_API}`)
       .then(res =>  {
         // console.log(res.data);
         // response.send(res.data)
@@ -58,31 +57,33 @@ app.prepare()
     return handle(req, res)
   })
 
-  assistant.intent('BusEstimates', async conv => {
-    const estimates = await axios.get(`http://api.translink.ca/rttiapi/v1/stops/60980/estimates?apikey=${process.env.TRANSLINK_API}`)
+  assistant.intent('BusEstimates', async (conv, {number}) => {
+    console.log("number", number)
+    const estimates = await axios.get(`http://api.translink.ca/rttiapi/v1/stops/${number}/estimates?apikey=${process.env.TRANSLINK_API}`)
      .then(res =>  {
        return res.data
      })
      .catch(error => {
-       console.log(error);
-       return {}
+       return error.response.data.Message
      });
 
      const convRespose = []
-     estimates.map((estimate)=> {
-       convRespose.push(estimate.RouteNo)
-     })
-     conv.ask(convRespose.join());
-
+     if(typeof estimates === 'string'){
+       conv.ask(estimates);
+     } else {
+       estimates.map((estimate)=> {
+         convRespose.push(estimate.RouteNo)
+       })
+       conv.ask(convRespose.join());
+     }
   });
 
   server.post('/webhook', assistant);
 
-  // server.listen(5005, (err) => {
-  //   if (err) throw err
-  //   console.log('> Ready on http://localhost:5005')
-  // })
-  server.use(bodyParser.json(), assistant).listen(5005);
+  server.use(bodyParser.json(), assistant).listen(5005, (err) => {
+    if (err) throw err
+    console.log('> Ready on http://localhost:5005')
+  })
 })
 .catch((ex) => {
   console.error(ex.stack)
