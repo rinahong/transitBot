@@ -45,6 +45,8 @@ class Search extends Component {
         <div>
         {
           this.props.estimates ?
+          (typeof this.props.estimates === "string" ?
+          <li>{this.props.estimates}</li> :
           this.props.estimates.map(estimate => (
             <ul>
               <li>{estimate.RouteNo}:
@@ -55,7 +57,7 @@ class Search extends Component {
               }
               </li>
             </ul>
-          )) : <ul></ul>
+          ))): <ul></ul>
         }
         </div>
       </main>
