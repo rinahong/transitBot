@@ -30,6 +30,9 @@ app.prepare()
     translink.estimates(busStop)
     .then(estimates => {
       const queryParams = { estimates: estimates}
+      if(typeof estimates !== 'string') {
+        firebaseAPI.historyCreate('rina', busStop)
+      }
       response.estimates = estimates
       app.render(request, response, actualPage, queryParams)
     });
@@ -51,7 +54,6 @@ app.prepare()
 
   server.get('/user', (request, response) => {
     const actualPage = '/user'
-    console.log("check user server")
     firebaseAPI.historyAll('rina')
     .then(res => {
       const queryParams = { history: res}
