@@ -12,15 +12,15 @@ const menuBottom = {
 
 const MenuBar = () => (
   <div style={menuBottom}>
-  <Link href="/search">
+  <a href="/search">
     <button>Search</button>
-  </Link>
-  <Link href="/map">
+  </a>
+  <a href="/map">
     <button>Map</button>
-  </Link>
-  <Link href="/user">
+  </a>
+  <a href="/user">
     <button>My Page</button>
-  </Link>
+  </a>
   </div>
 )
 
