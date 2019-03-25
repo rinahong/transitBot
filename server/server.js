@@ -12,12 +12,14 @@ require('dotenv').config();
 
 const assistant = require('./dialogflow');
 const translink = require('./request/translink');
-const history = require('./request/history');
+const firebaseAPI = require('./request/firebase');
+let currentUser = ''
 
 app.prepare()
 .then(() => {
   const server = express()
 
+  server.use(bodyParser.json())
   // For cors configuration
   server.use(cors())
 
@@ -28,14 +30,31 @@ app.prepare()
     translink.estimates(busStop)
     .then(estimates => {
       const queryParams = { estimates: estimates}
+      if(typeof estimates !== 'string') {
+        firebaseAPI.historyCreate('rina', busStop)
+      }
       response.estimates = estimates
       app.render(request, response, actualPage, queryParams)
     });
   })
 
+  server.post('/register', (request, response) => {
+    console.log(request.body)
+    const {email, password} = request.body
+    const actualPage = '/register'
+    firebaseAPI.register(email, password)
+    .then(res => {
+      if(res.success) {
+        currentUser = res.success
+      }
+      const queryParams = res
+      response.send(queryParams)
+    })
+  })
+
   server.get('/user', (request, response) => {
     const actualPage = '/user'
-    history.all('rina')
+    firebaseAPI.historyAll('rina')
     .then(res => {
       const queryParams = { history: res}
       app.render(request, response, actualPage, queryParams)
@@ -43,7 +62,7 @@ app.prepare()
   })
 
   server.post('/user/create', (request, response) => {
-    history.create('rina', 12345)
+    firebaseAPI.historyCreate('rina', 12345)
     const actualPage = '/user'
     app.render(request, response, actualPage)
   })
@@ -54,7 +73,7 @@ app.prepare()
 
   server.post('/webhook', assistant);
 
-  server.use(bodyParser.json(), assistant).listen(5005, (err) => {
+  server.use(assistant).listen(5005, (err) => {
     if (err) throw err
     console.log('> Ready on http://localhost:5005')
   })

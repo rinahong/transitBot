@@ -17,7 +17,7 @@ const User = (props) => {
            props.history ?
            Object.values(props.history).map(history => (
              <ul>
-               <li><Link as={`/user/${userID}/${history}`} href={`/user/${userID}/${history}`}><a>{history.busStop}</a></Link></li>
+               <li><a href={`/search/${history.busStop}`}>{history.busStop}</a></li>
              </ul>
            )) : <ul></ul>
          }
@@ -34,7 +34,6 @@ const User = (props) => {
 }
 
 User.getInitialProps = async function({query}) {
-  console.log("user", query)
   return query
 }
 
