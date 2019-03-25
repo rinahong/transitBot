@@ -3,18 +3,33 @@ const {dialogflow} = require('actions-on-google');
 const translink = require('./request/translink');
 const assistant = dialogflow();
 
+let busStop = ''
+let schedules = {}
+
+assistant.intent('BusEstimates - busNumber', (conv, {number}) => {
+  console.log("number", number)
+  console.log("schedules ----> ", schedules)
+  const convResponse = []
+  schedules[number].map((schedule)=> {
+    convResponse.push(`${schedule.ExpectedLeaveTime}`)
+  })
+  conv.ask(convResponse.join());
+});
+
 assistant.intent('BusEstimates', async (conv, {number}) => {
   console.log("number", number)
+  busStop = number
 
   const estimates = await translink.estimates(number)
-  const convRespose = []
+  const convResponse = []
   if(typeof estimates === 'string'){
     conv.ask(estimates);
   } else {
     estimates.map((estimate)=> {
-      convRespose.push(estimate.RouteNo)
+      schedules[estimate.RouteNo]= estimate.Schedules
+      convResponse.push(`${estimate.RouteNo}`)
     })
-    conv.ask(convRespose.join());
+    conv.ask(convResponse.join());
   }
 });
 
