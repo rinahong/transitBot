@@ -9,6 +9,7 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 
 require('dotenv').config();
+const alarm = require('node-schedule');
 
 const assistant = require('./dialogflow');
 const translink = require('./request/translink');
@@ -22,6 +23,16 @@ app.prepare()
   server.use(bodyParser.json())
   // For cors configuration
   server.use(cors())
+
+  // firebaseAPI.alarms()
+  // .then(alarms => {
+  //   alarms.map((alarm) => {
+  //     // {hour: 14, minute: 30, dayOfWeek: 0}
+  //     var j = alarm.scheduleJob(alarm, function(){
+  //       console.log('Time for tea!');
+  //     });
+  //   })
+  // })
 
   server.get('/search/:busstop', (request, response) => {
     const busStop = request.params.busstop;
@@ -61,10 +72,24 @@ app.prepare()
     })
   })
 
-  server.post('/user/create', (request, response) => {
-    firebaseAPI.historyCreate('rina', 12345)
-    const actualPage = '/user'
-    app.render(request, response, actualPage)
+  server.post('/user/alarm', (request, response) => {
+    console.log("in alarm")
+    const {alarmSchedule, busStop} = request.body
+    console.log("in alarm", alarmSchedule)
+    firebaseAPI.alarmCreate("rina", alarmSchedule, busStop)
+    .then(res => {
+        var j = alarm.scheduleJob('alarmSchedule', function(){
+          console.log('fire alarmSchedule');
+          const actualPage = '/user'
+
+          translink.estimates(busStop)
+          .then(estimates => {
+            const queryParams = { estimates: estimates}
+            response.estimates = estimates
+            app.render(request, response, actualPage, queryParams)
+          });
+        });
+    })
   })
 
   server.get('*', (req, res) => {

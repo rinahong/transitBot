@@ -33,6 +33,18 @@ module.exports = {
     });
   },
 
+  alarmCreate: function(username, recurringSchedule, busStop) {
+    console.log("alarm.create")
+    const dateTimeNow = moment().format()
+    return firebase.database().ref(`user/${username}/alarm/${dateTimeNow}`).set({
+      recurringSchedule: recurringSchedule,
+      busStop: busStop
+    })
+    .then((res) => {
+      return "Alarm created"
+    });
+  },
+
   register: function (email, password){
     return firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(res => ({success: res.user.email}))

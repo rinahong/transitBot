@@ -11,7 +11,7 @@ const User = (props) => {
       <Layout>
         <div className="container" style={{display:'flex'}}>
           <div style={{margin:'0 10%'}}>
-            <h1>Your Fav list</h1>
+            <h1>Your Search History</h1>
             <span>
          {
            props.history ?
@@ -34,6 +34,7 @@ const User = (props) => {
 }
 
 User.getInitialProps = async function({query}) {
+  console.log("==========user===========", query)
   return query
 }
 
