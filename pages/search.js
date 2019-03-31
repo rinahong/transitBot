@@ -26,8 +26,8 @@ class Search extends Component {
   }
 
   render () {
-    const {busStop, estimates} = this.state;
-
+    const {busStop} = this.state;
+    let keyCount = 0;
     return (
       <Layout>
         <div>
@@ -47,16 +47,16 @@ class Search extends Component {
           (typeof this.props.estimates === "string" ?
           <li>{this.props.estimates}</li> :
           this.props.estimates.map(estimate => (
-            <ul>
+            <ul key={keyCount++}>
               <li>{estimate.RouteNo}:
               {
                 estimate.Schedules.map(schedule => (
-                  <span>{schedule.ExpectedLeaveTime}</span>
+                  <span key={keyCount++}>{schedule.ExpectedLeaveTime}</span>
                 ))
               }
               </li>
             </ul>
-          ))): <ul></ul>
+          ))): <ul key={keyCount++}></ul>
         }
         </div>
       </Layout>

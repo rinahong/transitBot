@@ -23,12 +23,11 @@ app.prepare()
   server.use(bodyParser.json())
   // For cors configuration
   server.use(cors())
-  
+
   server.use(function (req, res, next) {
     firebaseAPI.alarms('rina')
     .then(alarms => {
       Object.values(alarms).map((alarmInfo) => {
-        console.log('alarmInfo', alarmInfo)
         var j = alarm.scheduleJob(alarmInfo.recurringSchedule, function(){
           translink.estimates(alarmInfo.busStop)
           .then(estimates => {

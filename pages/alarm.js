@@ -23,8 +23,6 @@ class Alarm extends Component {
   handleChange (name) {
     return event => {
       const {currentTarget} = event;
-      console.log("name: ", name)
-      console.log("currentTarget: ", currentTarget.value)
       this.setState({[name]: currentTarget.value});
     };
   }
@@ -37,13 +35,10 @@ class Alarm extends Component {
       alarmTimeArr[0] = "0"
     }
     const alarmSchedule = {hour: parseInt(alarmTimeArr[0]), minute: parseInt(alarmTimeArr[1]), dayOfWeek: parseInt(day)}
-    console.log(alarmSchedule);
     axios.post('/alarm', {alarmSchedule, busStop})
   }
 
   render() {
-    const result = this.props.estimates
-    console.log("this.props", result)
     return (
       <Layout>
         <h1>Your Alarm Clock</h1>

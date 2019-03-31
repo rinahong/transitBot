@@ -1,10 +1,12 @@
 import Layout from '../components/Layout.js'
 import Link from 'next/link'
 
-export default () => {
+const Index = (props) => {
   return (
     <Layout>
       <h1>Welcome to Transit Bot</h1>
     </Layout>
   )
 }
+
+export default Index

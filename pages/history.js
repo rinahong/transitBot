@@ -2,8 +2,8 @@ import Layout from '../components/Layout.js'
 import Link from 'next/link'
 
 const History = (props) => {
-  // console.log("props", props)
-  const userID = "changeThis"
+  console.log(props.history)
+  let keyCount = 0;
   return (
 
       <Layout>
@@ -14,10 +14,10 @@ const History = (props) => {
              {
                props.history ?
                Object.values(props.history).map(history => (
-                 <ul>
+                 <ul key={keyCount++}>
                    <li><a href={`/search/${history.busStop}`}>{history.busStop}</a></li>
                  </ul>
-               )) : <ul></ul>
+               )) : <ul key={keyCount++}></ul>
              }
              </span>
           </div>

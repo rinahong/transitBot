@@ -7,7 +7,6 @@ import Layout from '../components/Layout.js'
 class Register extends Component {
   constructor (props) {
     super(props);
-
     this.state = {
       email: "",
       password: "",
@@ -27,14 +26,11 @@ class Register extends Component {
   createToken (event) {
     event.preventDefault();
     const {email, password} = this.state;
-    console.log(email, password)
     const that = this;
     axios.post('/register', {email, password})
     .then(function (response) {
-      console.log(response.data);
       if(response.data.success) {
         localStorage.setItem('currentUser', response.data.success);
-        console.log(that.props)
         // // that.props.url.push('/user');
         // Router.push('/')
       } else {
@@ -42,7 +38,7 @@ class Register extends Component {
       }
     })
     .catch(function (error) {
-      console.log(error);
+      that.setState({failStatus: error});
     });
   }
 
