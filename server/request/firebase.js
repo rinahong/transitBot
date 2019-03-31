@@ -45,6 +45,15 @@ module.exports = {
     });
   },
 
+  alarms: function(username) {
+    // console.log("firebase alarms", username)
+    const dateTimeNow = moment().format()
+    const userAlarms = firebase.database().ref(`user/${username}/alarm`);
+    return userAlarms.once('value').then(function(snapshot) {
+      return snapshot.val()
+    });
+  },
+
   register: function (email, password){
     return firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(res => ({success: res.user.email}))

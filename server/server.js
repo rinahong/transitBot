@@ -23,16 +23,26 @@ app.prepare()
   server.use(bodyParser.json())
   // For cors configuration
   server.use(cors())
+  
+  server.use(function (req, res, next) {
+    firebaseAPI.alarms('rina')
+    .then(alarms => {
+      Object.values(alarms).map((alarmInfo) => {
+        console.log('alarmInfo', alarmInfo)
+        var j = alarm.scheduleJob(alarmInfo.recurringSchedule, function(){
+          translink.estimates(alarmInfo.busStop)
+          .then(estimates => {
+            const actualPage = '/alarm'
+            const queryParams = { estimates: estimates}
+            response.estimates = estimates
+            app.render(request, response, actualPage, queryParams)
+          });
+        });
+      })
+    })
+    next()
+  })
 
-  // firebaseAPI.alarms()
-  // .then(alarms => {
-  //   alarms.map((alarm) => {
-  //     // {hour: 14, minute: 30, dayOfWeek: 0}
-  //     var j = alarm.scheduleJob(alarm, function(){
-  //       console.log('Time for tea!');
-  //     });
-  //   })
-  // })
 
   server.get('/search/:busstop', (request, response) => {
     const busStop = request.params.busstop;
@@ -73,17 +83,15 @@ app.prepare()
   })
 
   server.post('/alarm', (request, response) => {
-    console.log("in alarm")
     const {alarmSchedule, busStop} = request.body
     console.log("in alarm", alarmSchedule)
+
     firebaseAPI.alarmCreate("rina", alarmSchedule, busStop)
     .then(res => {
-        var j = alarm.scheduleJob('alarmSchedule', function(){
-          console.log('fire alarmSchedule');
-          const actualPage = '/user'
-
+        var j = alarm.scheduleJob(alarmSchedule, function(){
           translink.estimates(busStop)
           .then(estimates => {
+            const actualPage = '/alarm'
             const queryParams = { estimates: estimates}
             response.estimates = estimates
             app.render(request, response, actualPage, queryParams)
