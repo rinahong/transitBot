@@ -63,8 +63,8 @@ app.prepare()
     })
   })
 
-  server.get('/user', (request, response) => {
-    const actualPage = '/user'
+  server.get('/history', (request, response) => {
+    const actualPage = '/history'
     firebaseAPI.historyAll('rina')
     .then(res => {
       const queryParams = { history: res}
@@ -72,7 +72,7 @@ app.prepare()
     })
   })
 
-  server.post('/user/alarm', (request, response) => {
+  server.post('/alarm', (request, response) => {
     console.log("in alarm")
     const {alarmSchedule, busStop} = request.body
     console.log("in alarm", alarmSchedule)

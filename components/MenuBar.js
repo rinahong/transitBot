@@ -18,8 +18,11 @@ const MenuBar = () => (
   <a href="/map">
     <button>Map</button>
   </a>
-  <a href="/user">
-    <button>My Page</button>
+  <a href="/history">
+    <button>Search History</button>
+  </a>
+  <a href="/alarm">
+    <button>Alarms</button>
   </a>
   </div>
 )

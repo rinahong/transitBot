@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
-import axios from 'axios';
 import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
+import Layout from '../components/Layout.js'
 
 class Search extends Component {
   constructor (props) {
@@ -30,7 +29,7 @@ class Search extends Component {
     const {busStop, estimates} = this.state;
 
     return (
-      <main>
+      <Layout>
         <div>
           <input
             value={busStop}
@@ -60,7 +59,7 @@ class Search extends Component {
           ))): <ul></ul>
         }
         </div>
-      </main>
+      </Layout>
     )
   }
 }

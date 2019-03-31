@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Link from 'next/link'
-import axios from 'axios';
+import Layout from '../components/Layout.js'
+
 class Alarm extends Component {
   constructor (props) {
     super(props);
@@ -80,7 +81,7 @@ class Alarm extends Component {
 
   render() {
     return (
-      <div>
+      <Layout>
         <h1>Your Alarm Clock</h1>
         <h2>currentTime: {this.state.currentTime}.
         </h2>
@@ -98,9 +99,9 @@ class Alarm extends Component {
           <input key="8" type="radio" name="day" value="6" onChange={this.handleChange('day')}/> Sat
           <input key="9" type="radio" name="day" value="7" onChange={this.handleChange('day')}/> Sun <br/>
           <input type='submit' value='saveAlarm'/>
-          <Link as={`/user/alarm`} href={`/user/alarm`}><a>Save</a></Link>
+          <Link as={`/alarm`} href={`/alarm`}><a>Save</a></Link>
         </form>
-      </div>
+      </Layout>
     );
   }
 }
