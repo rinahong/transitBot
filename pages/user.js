@@ -34,7 +34,7 @@ const User = (props) => {
 }
 
 User.getInitialProps = async function({query}) {
-  console.log("==========user===========", query)
+  // console.log("==========user===========", query)
   return query
 }
 

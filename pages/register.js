@@ -35,8 +35,8 @@ class Register extends Component {
       if(response.data.success) {
         localStorage.setItem('currentUser', response.data.success);
         console.log(that.props)
-        // // that.props.url.push('/user');
-        // Router.push('/')
+        // that.props.url.push('/search');
+        Router.push('/search')
       } else {
         that.setState({failStatus: response.data.fail});
       }

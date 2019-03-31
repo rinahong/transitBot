@@ -10,18 +10,34 @@ const menuBottom = {
 
 }
 
-const MenuBar = () => (
-  <div style={menuBottom}>
-  <a href="/search">
-    <button>Search</button>
-  </a>
-  <a href="/map">
-    <button>Map</button>
-  </a>
-  <a href="/user">
-    <button>My Page</button>
-  </a>
-  </div>
-)
+const MenuBar = (props) => {
+  const {user, onSignOut = () => {}} = props;
+  console.log("---onSignOut", onSignOut)
+  return (
+    <div style={menuBottom}>
+    <a href="/search">
+      <button>Search</button>
+    </a>
+    <a href="/map">
+      <button>Map</button>
+    </a>
+    <a href="/user">
+      <button>My Page</button>
+    </a>
+    {
+      user ?
+      <span>Welcome, {user}</span>
+      :
+      ([<a href="/register">
+        <button>Register</button>
+      </a>,
+      <a href="/login">
+        <button>Login</button>
+      </a>])
+    }
+
+    </div>
+  )
+}
 
 export default MenuBar
