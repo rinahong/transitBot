@@ -106,7 +106,7 @@ app.prepare()
 
   server.post('/webhook', assistant);
 
-  server.use(assistant).listen(process.env.PORT || 5005, (err) => {
+  server.use(assistant).listen(process.env.PORT || 5005, '0.0.0.0', (err) => {
     if (err) throw err
     console.log('> Ready on http://localhost:5005')
   })
