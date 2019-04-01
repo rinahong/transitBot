@@ -1,6 +1,7 @@
 import Layout from '../components/Layout.js'
 import Link from 'next/link'
-
+import React, {Component} from 'react'
+import "@babel/polyfill";
 const History = (props) => {
   console.log(props.history)
   let keyCount = 0;

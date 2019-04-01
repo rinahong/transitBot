@@ -1,17 +1,8 @@
 import Link from 'next/link';
+import React, {Component} from 'react'
 
-const menuBottom = {
-  position: '-webkit-sticky',
-  position: 'sticky',
-  bottom: 0,
-  width: '50%',
-  padding: '5px',
-  margin: '0 auto'
-
-}
-
-const MenuBar = () => (
-  <div style={menuBottom}>
+const MenuBar = (props) => (
+  <div>
   <a href="/search">
     <button>Search</button>
   </a>

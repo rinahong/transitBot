@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Link from 'next/link'
 import Layout from '../components/Layout.js'
+import "@babel/polyfill";
 
 class Search extends Component {
   constructor (props) {
