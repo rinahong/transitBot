@@ -54,6 +54,7 @@ app.prepare()
         firebaseAPI.historyCreate('rina', busStop)
       }
       response.estimates = estimates
+      console.log("--------", estimates)
       app.render(request, response, actualPage, queryParams)
     });
   })
