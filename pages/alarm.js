@@ -43,8 +43,8 @@ class Alarm extends Component {
       <Layout>
         <h1>Your Alarm Clock</h1>
         <form onSubmit={this.setAlarm}>
-          Time: <input key="1" type="time" name="alarmTime" onChange={this.handleChange('alarmTime')}></input> <br/>
-          Bus stop: <input key="2" type="number" name="busStop" placeholder="#####" onChange={this.handleChange('busStop')}></input> <br/>
+          Time: <input key="1" type="time" id="alarmTime" name="alarmTime" onChange={this.handleChange('alarmTime')}></input> <br/>
+          Bus stop: <input key="2" type="number" id="busStop" name="busStop" placeholder="#####" onChange={this.handleChange('busStop')}></input> <br/>
           Days:
           <input key="9" type="radio" name="day" value="0" onChange={this.handleChange('day')}/> Sun
           <input key="3" type="radio" name="day" value="1" onChange={this.handleChange('day')}/> Mon

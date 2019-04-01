@@ -28,9 +28,12 @@ const History = (props) => {
   )
 }
 
-History.getInitialProps = async function({query}) {
-  console.log("==========user===========", query)
-  return query
+History.getInitialProps = async function(ctx) {
+  if(ctx) {
+    return ctx.query
+  }
+  return {}
+
 }
 
 export default History
