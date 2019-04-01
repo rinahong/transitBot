@@ -14,6 +14,7 @@ const alarm = require('node-schedule');
 const assistant = require('./dialogflow');
 const translink = require('./request/translink');
 const firebaseAPI = require('./request/firebase');
+const port = process.env.PORT || 5005;
 let currentUser = ''
 
 app.prepare()
@@ -106,7 +107,7 @@ app.prepare()
 
   server.post('/webhook', assistant);
 
-  server.use(assistant).listen(5005, (err) => {
+  server.use(assistant).listen(port, (err) => {
     if (err) throw err
     console.log('> Ready on http://localhost:5005')
   })
